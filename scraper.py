@@ -16,10 +16,8 @@ def get_amount_pages():
         if ad: number_page += 1
     return number_page
 
-
-
-amount_page = get_amount_pages()
-
+# amount_page = get_amount_pages()
+amount_page = 2
 for current_page in range(1, amount_page):
     # Get data for one of pages
     html_text = requests.get(f"{site}{page}{current_page}").text
@@ -58,3 +56,12 @@ for current_page in range(1, amount_page):
 
     # Get description
     description = soup_car.find("div", class_="short-description").text
+
+    car_photos = soup_car.find_all("div", class_="gallery-picture")[:3]
+    for index, photo in enumerate(car_photos):
+        image = requests.get(photo.img["data-src"])
+        image_file = open(f'{index+1}.jpg', 'wb')
+        image_file.write(image.content)
+        image_file.close()
+
+# if __name__ == "__main":
